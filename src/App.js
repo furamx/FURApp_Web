@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import FormSpecies from './FormSpecies';
+import FormSpecies from './SpeciesForm/SpeciesForm';
 
 class App extends Component {
   constructor(){
