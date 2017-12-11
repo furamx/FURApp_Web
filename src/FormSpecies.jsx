@@ -7,8 +7,9 @@ import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { Thumbnail } from 'react-bootstrap';
 import { PageHeader } from 'react-bootstrap';
-import { Panel, OverlayTrigger } from 'react-bootstrap';
+import { Panel } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
+// import * as firebase from 'firebase';
 
 
 class SpeciesForm extends Component {
@@ -67,7 +68,6 @@ class SpeciesForm extends Component {
     }
     return uiItems || null;
   }
-
   render() {
     return (
       <div >
@@ -105,12 +105,13 @@ class SpeciesForm extends Component {
                   <Thumbnail src="./logo.svg" alt="242x200">
                     <h3>Árbol completo</h3>
 
-                    {/* <Dropzone
+                    <Dropzone
                       accept="image/jpeg, image/png"
+                      multiple={false}
                       onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
                     >
-                    <p>Agregar Imagen</p>
-                    </Dropzone> */}
+                      <p>Agregar Imagen</p>
+                    </Dropzone>
                     <p>Imágen del árbol entero</p>
                     <p>
                       <Button bsStyle="success" type="file" block>+</Button>&nbsp;
@@ -121,6 +122,13 @@ class SpeciesForm extends Component {
                 <Col xs={6} md={4}>
                   <Thumbnail src="./logo.svg" alt="242x200">
                     <h3>Tronco</h3>
+                    <Dropzone
+                      accept="image/jpeg, image/png"
+                      multiple={false}
+                      onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
+                    >
+                      <p>Agregar Imagen</p>
+                    </Dropzone>
                     <p>Imágen del tronco del árbol</p>
                     <p>
                       <Button bsStyle="success" block>+</Button>&nbsp;
@@ -132,6 +140,13 @@ class SpeciesForm extends Component {
                 <Col xs={6} md={4}>
                   <Thumbnail src="./logo.svg" alt="242x200">
                     <h3>Hoja</h3>
+                    <Dropzone
+                      accept="image/jpeg, image/png"
+                      multiple={false}
+                      onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
+                    >
+                      <p>Agregar Imagen</p>
+                    </Dropzone>
                     <p>Imágen de la flor del árbol</p>
                     <p>
                       <Button bsStyle="success" block>+</Button>&nbsp;
@@ -144,6 +159,13 @@ class SpeciesForm extends Component {
                 <Col xs={6} md={4}>
                   <Thumbnail src="./logo.svg" alt="242x200">
                     <h3>Semilla / Fruto</h3>
+                    <Dropzone
+                      accept="image/jpeg, image/png"
+                      multiple={false}
+                      onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
+                    >
+                      <p>Agregar Imagen</p>
+                    </Dropzone>
                     <p>Imágen de la semilla o fruto del árbol</p>
                     <p>
                       <Button bsStyle="success" block>+</Button>&nbsp;
@@ -154,6 +176,13 @@ class SpeciesForm extends Component {
                 <Col xs={6} md={4}>
                   <Thumbnail src="./logo.svg" alt="242x200">
                     <h3>Flor</h3>
+                    <Dropzone
+                      accept="image/jpeg, image/png"
+                      multiple={false}
+                      onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
+                    >
+                      <p>Agregar Imagen</p>
+                    </Dropzone>
                     <p>Imágen de la flor del árbol</p>
                     <p>
                       <Button bsStyle="success" block>+</Button>&nbsp;
@@ -164,6 +193,13 @@ class SpeciesForm extends Component {
                 <Col xs={6} md={4}>
                   <Thumbnail src="./logo.svg" alt="242x200">
                     <h3>Raíz</h3>
+                    <Dropzone
+                      accept="image/jpeg, image/png"
+                      multiple={false}
+                      onDrop={(accepted, rejected) => { this.setState({ accepted, rejected }); }}
+                    >
+                      <p>Agregar Imagen</p>
+                    </Dropzone>
                     <p>Imágen de la raíz del árbol</p>
                     <p>
                       <Button bsStyle="success" block>+</Button>&nbsp;
@@ -179,6 +215,9 @@ class SpeciesForm extends Component {
         </form>
       </div >
     );
+  }
+  uploadFile() {
+
   }
 }
 
