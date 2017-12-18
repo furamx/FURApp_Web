@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { Button, InputGroup, Image, FormControl, FormGroup, ControlLabel, Row, Col, Thumbnail, PageHeader, Panel, ProgressBar } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import './SpeciesForm.css';
-// import logo from './../logo.svg';
 import addIcon from './../Images/Icons/add_1x.png'
 import removeIcon from './../Images/Icons/remove_1x.png'
-// import * as firebase from 'firebase';
 import firebase from './../firebase.js';
 
+let dropzoneRefTree;
+let dropzoneRefLeaf;
+let dropzoneRefTrunk;
+let dropzoneRefSeed;
+let dropzoneRefFlower;
+let dropzoneRefRoot;
 
-class SpeciesForm extends Component {
+export default class SpeciesForm extends Component {
 
   constructor(props) {
     super(props);
@@ -47,11 +51,13 @@ class SpeciesForm extends Component {
     this.removeFile = this.removeFile.bind(this);
 
   }
+
   handleChange(i, event) {
     let value = this.state.value.slice();
     value[i] = event.target.value;
     this.setState({ value });
   }
+
   handleSubmit(event) {
     // alert('A name was submitted: ' + this.state.scientificName);
     console.log("Scientifi name: " + this.state.scientificName);
@@ -144,6 +150,10 @@ class SpeciesForm extends Component {
     return uiItems || null;
   }
 
+  componentDidMount() {
+    //console.log('component did mount');
+  }
+
   /* Renders UI */
   render() {
     return (
@@ -169,18 +179,17 @@ class SpeciesForm extends Component {
                     <h3>Árbol completo</h3>
                     <div className="upload-dropzone">
                       <Dropzone
+                        ref={(node) => { dropzoneRefTree = node; }}
+                        onDrop={(accepted, rejected) => this.onDrop(accepted)}
                         accept="image/jpeg, image/png"
-                        multiple={false}
-                        onDrop={this.onDrop.bind(this)}
-                        disabled={this.state.buttonOne}
-                      >
-                        <p>Agregar Imagen</p>
+                        multiple={false}>
+                        <p>Drop files here.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen del árbol entero</p>
                     <p>
-                      <Button bsStyle={this.state.buttonOne ? "success" : "danger"} block onClick={() => this.setState({ buttonOne: !this.state.buttonOne })}>
-                        <Image src={this.state.buttonOne ? addIcon : removeIcon} />
+                      <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefTree.open() }}>
+                        <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
                     </p>
                     <ProgressBar striped bsStyle="success"
@@ -195,20 +204,19 @@ class SpeciesForm extends Component {
                     <h3>Tronco</h3>
                     <div className="upload-dropzone">
                       <Dropzone
+                        ref={(node) => { dropzoneRefTrunk = node; }}
+                        onDrop={(accepted, rejected) => { alert('trunk') }}
                         accept="image/jpeg, image/png"
-                        multiple={false}
-                        onDrop={this.onDrop.bind(this)}
-                        disabled={this.state.buttonTwo}
-                      >
-                        <p>Agregar Imagen</p>
+                        multiple={false}>
+                        <p>Drop files here.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen del árbol entero</p>
                     <p>
-                      <Button bsStyle={this.state.buttonTwo ? "success" : "danger"} block onClick={() => this.setState({ buttonTwo: !this.state.buttonTwo })}>
-                        <Image src={this.state.buttonTwo ? addIcon : removeIcon} />
+                      <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefTrunk.open() }}>
+                        <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
-                  </p>
+                    </p>
                     <ProgressBar striped bsStyle="success"
                       now={this.state.treeProgress.progress}
                       hidden={this.state.treeProgress.hidden}
@@ -220,21 +228,28 @@ class SpeciesForm extends Component {
                   <Thumbnail className="thumbnails">
                     <h3>Hoja</h3>
                     <div className="upload-dropzone">
-                      <Dropzone
+                      {/* <Dropzone
                         accept="image/jpeg, image/png"
                         multiple={false}
                         onDrop={this.onDrop.bind(this)}
-                        disabled={this.state.buttonThree}
+                      // disabled={this.state.buttonThree}
                       >
                         <p>Agregar Imagen</p>
+                      </Dropzone> */}
+                      <Dropzone
+                        ref={(node) => { dropzoneRefLeaf = node; }}
+                        onDrop={(accepted, rejected) => { alert('leaf') }}
+                        accept="image/jpeg, image/png"
+                        multiple={false}>
+                        <p>Drop files here.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen del árbol entero</p>
                     <p>
-                      <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block onClick={() => this.setState({ buttonThree: !this.state.buttonThree })}>
+                      <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefLeaf.open() }}>
                         <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
-                </p>
+                    </p>
                     <ProgressBar striped bsStyle="success"
                       now={this.state.treeProgress.progress}
                       hidden={this.state.treeProgress.hidden}
@@ -247,20 +262,19 @@ class SpeciesForm extends Component {
                     <h3>Semilla / Fruto</h3>
                     <div className="upload-dropzone">
                       <Dropzone
+                        ref={(node) => { dropzoneRefSeed = node; }}
+                        onDrop={(accepted, rejected) => { alert('seed') }}
                         accept="image/jpeg, image/png"
-                        multiple={false}
-                        onDrop={this.onDrop.bind(this)}
-                        disabled={this.state.buttonFour}
-                      >
-                        <p>Agregar Imagen</p>
+                        multiple={false}>
+                        <p>Drop files here.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen del árbol entero</p>
                     <p>
-                      <Button bsStyle={this.state.buttonFour ? "success" : "danger"} block onClick={() => this.setState({ buttonFour: !this.state.buttonFour })}>
-                        <Image src={this.state.buttonFour ? addIcon : removeIcon} />
+                      <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefSeed.open() }}>
+                        <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
-                </p>
+                    </p>
                     <ProgressBar striped bsStyle="success"
                       now={this.state.treeProgress.progress}
                       hidden={this.state.treeProgress.hidden}
@@ -273,20 +287,19 @@ class SpeciesForm extends Component {
                     <h3>Flor</h3>
                     <div className="upload-dropzone">
                       <Dropzone
+                        ref={(node) => { dropzoneRefFlower = node; }}
+                        onDrop={(accepted, rejected) => { alert('Flower') }}
                         accept="image/jpeg, image/png"
-                        multiple={false}
-                        onDrop={this.onDrop.bind(this)}
-                        disabled={this.state.buttonFive}
-                      >
-                        <p>Agregar Imagen</p>
+                        multiple={false}>
+                        <p>Drop files here.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen del árbol entero</p>
                     <p>
-                      <Button bsStyle={this.state.buttonFive ? "success" : "danger"} block onClick={() => this.setState({ buttonFive: !this.state.buttonFive })}>
-                        <Image src={this.state.buttonFive ? addIcon : removeIcon} />
+                      <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefFlower.open() }}>
+                        <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
-                </p>
+                    </p>
                     <ProgressBar striped bsStyle="success"
                       now={this.state.treeProgress.progress}
                       hidden={this.state.treeProgress.hidden}
@@ -299,20 +312,19 @@ class SpeciesForm extends Component {
                     <h3>Raíz</h3>
                     <div className="upload-dropzone">
                       <Dropzone
+                        ref={(node) => { dropzoneRefRoot = node; }}
+                        onDrop={(accepted, rejected) => { alert('Root') }}
                         accept="image/jpeg, image/png"
-                        multiple={false}
-                        onDrop={this.onDrop.bind(this)}
-                        disabled={this.state.buttonSix}
-                      >
-                        <p>Agregar Imagen</p>
+                        multiple={false}>
+                        <p>Drop files here.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen del árbol entero</p>
                     <p>
-                      <Button bsStyle={this.state.buttonSix ? "success" : "danger"} block onClick={() => this.setState({ buttonSix: !this.state.buttonSix })}>
-                        <Image src={this.state.buttonSix ? addIcon : removeIcon} />
+                      <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefRoot.open() }}>
+                        <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
-                </p>
+                    </p>
                     <ProgressBar striped bsStyle="success"
                       now={this.state.treeProgress.progress}
                       hidden={this.state.treeProgress.hidden}
@@ -331,7 +343,9 @@ class SpeciesForm extends Component {
     );
   }
 
-  onDrop(files) {
+  //Handle File selection
+  onDrop(files, rejected) {
+    console.log("entered on drop");
     this.setState({
       files
     });
@@ -357,11 +371,6 @@ class SpeciesForm extends Component {
         }
       }));
 
-
-
-
-
-
       switch (snapshot.state) {
         case firebase.storage.TaskState.PAUSED: // or 'paused'
           console.log('Upload is paused');
@@ -386,10 +395,4 @@ class SpeciesForm extends Component {
   removeFile() {
 
   }
-
-  enableDropzone(e) {
-
-  }
 }
-
-export default SpeciesForm;
