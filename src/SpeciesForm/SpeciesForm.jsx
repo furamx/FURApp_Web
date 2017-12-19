@@ -19,22 +19,43 @@ export default class SpeciesForm extends Component {
     super(props);
     this.state = {
       scientificName: null,
+      treeURL: null,
+      treeTrunkURL: null,
+      treeLeafURL: null,
+      treeFruitURL: null,
+      treeFlowerURL: null,
+      treeRootURL: null,
       value: [],
       count: 1,
       accepted: [],
       rejected: [],
       files: [],
-      treeFlowerProgress: 0,
-      treeFruitProgress: 0,
-      treeLeafProgress: 0,
+      treeFlowerProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeFruitProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeLeafProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
       treeProgress: {
         progress: 0,
         hidden: true,
         disabled: true
       },
-      treeRootProgress: 0,
-      treeTrunkProgress: 0,
-      testSatate: {
+      treeRootProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeTrunkProgress: {
         progress: 0,
         hidden: true,
         disabled: true
@@ -49,6 +70,13 @@ export default class SpeciesForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.removeFile = this.removeFile.bind(this);
+    this.uploadImage = this.uploadImage.bind(this);
+    this.handleTreeUpload = this.handleTreeUpload.bind(this);
+    this.handleTreeTrunkUpload = this.handleTreeTrunkUpload.bind(this);
+    this.handleTreeLeafUpload = this.handleTreeLeafUpload.bind(this);
+    this.handleTreeFruitUpload = this.handleTreeFruitUpload.bind(this);
+    this.handleTreeFlowerUpload = this.handleTreeFlowerUpload.bind(this);
+    this.handleTreeRootUpload = this.handleTreeRootUpload.bind(this);
 
   }
 
@@ -64,23 +92,21 @@ export default class SpeciesForm extends Component {
     console.log(this.state.value);
     console.log(this.state.accepted);
     event.preventDefault();
-
-    // var storageRef = firebase.storage().ref('Species');
-
-
     const specieRef = firebase.database().ref('species');
     const specie = {
       scientificName: this.state.scientificName,
       commonNames: this.state.value,
       speciePhotos: {
-        treeFlowerPhoto: "photo_url",
-        treeFruitPhoto: "photo_url",
-        treeLeafPhoto: "photo_url",
-        treePhoto: "photo_url",
-        treeRootPhoto: "photo_url",
-        treeTrunkPhoto: "photo_url"
+        treeFlowerPhoto: this.state.treeFlowerURL,
+        treeFruitPhoto: this.state.treeFruitURL,
+        treeLeafPhoto: this.state.treeLeafURL,
+        treePhoto: this.state.treeURL,
+        treeRootPhoto: this.state.treeRootURL,
+        treeTrunkPhoto: this.state.treeTrunkURL
       }
     }
+
+    console.log(specie);
 
     specieRef.push(specie);
   }
@@ -180,13 +206,13 @@ export default class SpeciesForm extends Component {
                     <div className="upload-dropzone">
                       <Dropzone
                         ref={(node) => { dropzoneRefTree = node; }}
-                        onDrop={(accepted, rejected) => this.onDrop(accepted)}
+                        onDrop={(e) => this.handleTreeUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
                         <p>Drop files here.</p>
                       </Dropzone>
                     </div>
-                    <p>Imágen del árbol entero</p>
+                    <p>Imágen del árbol completo</p>
                     <p>
                       <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefTree.open() }}>
                         <Image src={this.state.buttonThree ? addIcon : removeIcon} />
@@ -205,56 +231,49 @@ export default class SpeciesForm extends Component {
                     <div className="upload-dropzone">
                       <Dropzone
                         ref={(node) => { dropzoneRefTrunk = node; }}
-                        onDrop={(accepted, rejected) => { alert('trunk') }}
+                        // onDrop={(accepted, rejected) => { alert('trunk') }}
+                        onDrop={(e) => this.handleTreeTrunkUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
                         <p>Drop files here.</p>
                       </Dropzone>
                     </div>
-                    <p>Imágen del árbol entero</p>
+                    <p>Imágen del tronco del árbol</p>
                     <p>
                       <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefTrunk.open() }}>
                         <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
                     </p>
                     <ProgressBar striped bsStyle="success"
-                      now={this.state.treeProgress.progress}
-                      hidden={this.state.treeProgress.hidden}
+                      now={this.state.treeTrunkProgress.progress}
+                      hidden={this.state.treeTrunkProgress.hidden}
                       id='tree_progress'
-                      label={`${this.state.treeProgress.progress}%`} />
+                      label={`${this.state.treeTrunkProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
                 <Col xs={12} md={4} lg={2}>
                   <Thumbnail className="thumbnails">
                     <h3>Hoja</h3>
                     <div className="upload-dropzone">
-                      {/* <Dropzone
-                        accept="image/jpeg, image/png"
-                        multiple={false}
-                        onDrop={this.onDrop.bind(this)}
-                      // disabled={this.state.buttonThree}
-                      >
-                        <p>Agregar Imagen</p>
-                      </Dropzone> */}
                       <Dropzone
                         ref={(node) => { dropzoneRefLeaf = node; }}
-                        onDrop={(accepted, rejected) => { alert('leaf') }}
+                        onDrop={(e) => this.handleTreeLeafUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
                         <p>Drop files here.</p>
                       </Dropzone>
                     </div>
-                    <p>Imágen del árbol entero</p>
+                    <p>Imágen de la hoja del árbol</p>
                     <p>
                       <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefLeaf.open() }}>
                         <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
                     </p>
                     <ProgressBar striped bsStyle="success"
-                      now={this.state.treeProgress.progress}
-                      hidden={this.state.treeProgress.hidden}
+                      now={this.state.treeLeafProgress.progress}
+                      hidden={this.state.treeLeafProgress.hidden}
                       id='tree_progress'
-                      label={`${this.state.treeProgress.progress}%`} />
+                      label={`${this.state.treeLeafProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
                 <Col xs={12} md={4} lg={2}>
@@ -263,23 +282,23 @@ export default class SpeciesForm extends Component {
                     <div className="upload-dropzone">
                       <Dropzone
                         ref={(node) => { dropzoneRefSeed = node; }}
-                        onDrop={(accepted, rejected) => { alert('seed') }}
+                        onDrop={(e) => this.handleTreeFruitUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
                         <p>Drop files here.</p>
                       </Dropzone>
                     </div>
-                    <p>Imágen del árbol entero</p>
+                    <p>Imágen de la semilla/fruto del árbol</p>
                     <p>
                       <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefSeed.open() }}>
                         <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
                     </p>
                     <ProgressBar striped bsStyle="success"
-                      now={this.state.treeProgress.progress}
-                      hidden={this.state.treeProgress.hidden}
+                      now={this.state.treeFruitProgress.progress}
+                      hidden={this.state.treeFruitProgress.hidden}
                       id='tree_progress'
-                      label={`${this.state.treeProgress.progress}%`} />
+                      label={`${this.state.treeFruitProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
                 <Col xs={12} md={4} lg={2}>
@@ -288,23 +307,23 @@ export default class SpeciesForm extends Component {
                     <div className="upload-dropzone">
                       <Dropzone
                         ref={(node) => { dropzoneRefFlower = node; }}
-                        onDrop={(accepted, rejected) => { alert('Flower') }}
+                        onDrop={(e) => this.handleTreeFlowerUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
                         <p>Drop files here.</p>
                       </Dropzone>
                     </div>
-                    <p>Imágen del árbol entero</p>
+                    <p>Imágen de la flor del árbol</p>
                     <p>
                       <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefFlower.open() }}>
                         <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
                     </p>
                     <ProgressBar striped bsStyle="success"
-                      now={this.state.treeProgress.progress}
-                      hidden={this.state.treeProgress.hidden}
+                      now={this.state.treeFlowerProgress.progress}
+                      hidden={this.state.treeFlowerProgress.hidden}
                       id='tree_progress'
-                      label={`${this.state.treeProgress.progress}%`} />
+                      label={`${this.state.treeFlowerProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
                 <Col xs={12} md={4} lg={2}>
@@ -313,23 +332,23 @@ export default class SpeciesForm extends Component {
                     <div className="upload-dropzone">
                       <Dropzone
                         ref={(node) => { dropzoneRefRoot = node; }}
-                        onDrop={(accepted, rejected) => { alert('Root') }}
+                        onDrop={(e) => this.handleTreeRootUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
                         <p>Drop files here.</p>
                       </Dropzone>
                     </div>
-                    <p>Imágen del árbol entero</p>
+                    <p>Imágen de la raíz del árbol</p>
                     <p>
                       <Button bsStyle={this.state.buttonThree ? "success" : "danger"} block type="button" onClick={() => { dropzoneRefRoot.open() }}>
                         <Image src={this.state.buttonThree ? addIcon : removeIcon} />
                       </Button>&nbsp;
                     </p>
                     <ProgressBar striped bsStyle="success"
-                      now={this.state.treeProgress.progress}
-                      hidden={this.state.treeProgress.hidden}
+                      now={this.state.treeRootProgress.progress}
+                      hidden={this.state.treeRootProgress.hidden}
                       id='tree_progress'
-                      label={`${this.state.treeProgress.progress}%`} />
+                      label={`${this.state.treeRootProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
               </Row>
@@ -344,38 +363,97 @@ export default class SpeciesForm extends Component {
   }
 
   //Handle File selection
-  onDrop(files, rejected) {
-    console.log("entered on drop");
-    this.setState({
-      files
-    });
-    console.log(files);
-    console.log(files[0].name);
-    var storageRef = firebase.storage().ref('Species/' + files[0].name);
-    var uploadTask = storageRef.put(files[0]);
+  onDrop(acceptedFile, rejectedFile) {
+    if (acceptedFile.length >= 1) {
+      console.log(acceptedFile[0].name);
+      alert('valid file');
+      // var url = this.uploadImage(acceptedFile[0]);
+      // console.log('yo' + url)
+      // console.log(url);
+      // window.URL.revokeObjectURL(acceptedFile.preview);
+    } else if (rejectedFile.length >= 1) {
+      alert("Invalid File");
+      console.log(rejectedFile[0].name);
+      window.URL.revokeObjectURL(rejectedFile.preview);
+    }
+  }
 
+  uploadImage(file, dropzoneIdentifier) {
+    var storageRef = firebase.storage().ref('Species/' + file.name);
+    var uploadTask = storageRef.put(file);
     uploadTask.on('state_changed', (snapshot) => {
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
-      //this.setState({ treeProgress: Math.round(progress) });
 
-
-      //console.log(this.state.testSatate);
-
-      this.setState(prevState => ({
-        treeProgress: {
-          ...prevState.treeProgress,
-          progress: Math.round(progress),
-          hidden: false,
-          disabled: true
-        }
-      }));
-
+      switch (dropzoneIdentifier) {
+        case 1:
+          this.setState(prevState => ({
+            treeProgress: {
+              ...prevState.treeProgress,
+              progress: Math.round(progress),
+              hidden: false,
+              disabled: true
+            }
+          }));
+          break;
+        case 2:
+          this.setState(prevState => ({
+            treeTrunkProgress: {
+              ...prevState.treeTrunkProgress,
+              progress: Math.round(progress),
+              hidden: false,
+              disabled: true
+            }
+          }));
+          break;
+        case 3:
+          this.setState(prevState => ({
+            treeLeafProgress: {
+              ...prevState.treeLeafProgress,
+              progress: Math.round(progress),
+              hidden: false,
+              disabled: true
+            }
+          }));
+          break;
+        case 4:
+          this.setState(prevState => ({
+            treeFruitProgress: {
+              ...prevState.treeFruitProgress,
+              progress: Math.round(progress),
+              hidden: false,
+              disabled: true
+            }
+          }));
+          break;
+        case 5:
+          this.setState(prevState => ({
+            treeFlowerProgress: {
+              ...prevState.treeFlowerProgress,
+              progress: Math.round(progress),
+              hidden: false,
+              disabled: true
+            }
+          }));
+          break;
+        case 6:
+          this.setState(prevState => ({
+            treeRootProgress: {
+              ...prevState.treeRootProgress,
+              progress: Math.round(progress),
+              hidden: false,
+              disabled: true
+            }
+          }));
+          break;
+        default:
+          console.log("meh");
+          break;
+      }
       switch (snapshot.state) {
-        case firebase.storage.TaskState.PAUSED: // or 'paused'
+        case firebase.storage.TaskState.PAUSED:
           console.log('Upload is paused');
           break;
-        case firebase.storage.TaskState.RUNNING: // or 'running'
+        case firebase.storage.TaskState.RUNNING:
           console.log('Upload is running');
           break;
         default:
@@ -388,11 +466,77 @@ export default class SpeciesForm extends Component {
     }, () => {
       // Handle successful uploads on complete
       var downloadURL = uploadTask.snapshot.downloadURL;
-      alert(downloadURL);
-    }).bind(this);
+      console.log(uploadTask.snapshot);
+      // alert(downloadURL);
+      switch (dropzoneIdentifier) {
+        case 1:
+          this.setState({ treeURL: downloadURL });
+          console.log(this.state.treeURL);
+          break;
+        case 2:
+          this.setState({ treeTrunkURL: downloadURL });
+          console.log(this.state.treeTrunkURL);
+          break;
+        case 3:
+          this.setState({ treeLeafURL: downloadURL });
+          console.log(this.state.treeLeafURL);
+          break;
+        case 4:
+          this.setState({ treeFruitURL: downloadURL });
+          console.log(this.state.treeFruitURL);
+          break;
+        case 5:
+          this.setState({ treeFlowerURL: downloadURL });
+          console.log(this.state.treeFlowerURL);
+          break;
+        case 6:
+          this.setState({ treeRootURL: downloadURL });
+          console.log(this.state.treeRootURL);
+          break;
+        default:
+          console.log('error');
+          break;
+      }
+    });
   }
-
   removeFile() {
+
+  }
+  //Image Upload Event Handlers
+  handleTreeUpload(file) {
+    if (file.length > 0) {
+      this.uploadImage(file[0], 1);
+    }
+
+  }
+  handleTreeTrunkUpload(file) {
+    if (file.length > 0) {
+      this.uploadImage(file[0], 2);
+    }
+
+  }
+  handleTreeLeafUpload(file) {
+    if (file.length > 0) {
+      this.uploadImage(file[0], 3);
+    }
+
+  }
+  handleTreeFruitUpload(file) {
+    if (file.length > 0) {
+      this.uploadImage(file[0], 4);
+    }
+
+  }
+  handleTreeFlowerUpload(file) {
+    if (file.length > 0) {
+      this.uploadImage(file[0], 5);
+    }
+
+  }
+  handleTreeRootUpload(file) {
+    if (file.length > 0) {
+      this.uploadImage(file[0], 6);
+    }
 
   }
 }
