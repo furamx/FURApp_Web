@@ -5,6 +5,10 @@ import './SpeciesForm.css';
 import addIcon from './../Images/Icons/add_1x.png'
 import removeIcon from './../Images/Icons/remove_1x.png'
 import firebase from './../firebase.js';
+import MyAlert from './../Alerts/Alert';
+import SpeciesList from './../SpeciesList/SpeciesList';
+// import CustomModal from './../Modals/Modals';
+
 
 let dropzoneRefTree;
 let dropzoneRefLeaf;
@@ -18,6 +22,7 @@ export default class SpeciesForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      alertVisible: false,
       scientificName: null,
       treeURL: null,
       treeTrunkURL: null,
@@ -66,6 +71,10 @@ export default class SpeciesForm extends Component {
       buttonFour: true,
       buttonFive: true,
       buttonSix: true,
+      showModal: false,
+      modalTitle: null,
+      modalBody: null,
+      modalButton: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onDrop = this.onDrop.bind(this);
@@ -77,7 +86,6 @@ export default class SpeciesForm extends Component {
     this.handleTreeFruitUpload = this.handleTreeFruitUpload.bind(this);
     this.handleTreeFlowerUpload = this.handleTreeFlowerUpload.bind(this);
     this.handleTreeRootUpload = this.handleTreeRootUpload.bind(this);
-
   }
 
   handleChange(i, event) {
@@ -87,12 +95,8 @@ export default class SpeciesForm extends Component {
   }
 
   handleSubmit(event) {
-    // alert('A name was submitted: ' + this.state.scientificName);
-    console.log("Scientifi name: " + this.state.scientificName);
-    console.log(this.state.value);
-    console.log(this.state.accepted);
     event.preventDefault();
-    const specieRef = firebase.database().ref('species');
+    // const specieRef = firebase.database().ref('species');
     const specie = {
       scientificName: this.state.scientificName,
       commonNames: this.state.value,
@@ -108,7 +112,62 @@ export default class SpeciesForm extends Component {
 
     console.log(specie);
 
-    specieRef.push(specie);
+
+
+    // this.setState({ alertVisible: !this.state.alertVisible });
+
+
+    var flag = true;
+    console.log(flag);
+    // console.log(this.state.value);
+    // if (this.state.scientificName === null ||
+    //   this.state.scientificName === "" ||
+    //   this.state.value.length <= 0 ||
+    //   this.state.treeTrunkURL === null ||
+    //   this.state.treeLeafURL === null ||
+    //   this.state.treeFruitURL === null ||
+    //   this.state.treeFlowerURL === null ||
+    //   this.state.treeRootURL === null)
+    //   flag = false;
+
+    // if (this.state.scientificName === null ||
+    //   this.state.scientificName === "" ||
+    //   this.state.value.length <= 0)
+    //   flag = false;
+    // console.log('TypeOf:' + typeof (this.state.value));
+    // if (typeof (this.state.value === 'undefined')) {
+    //   flag = false;
+    //   console.log('Undefined shit');
+    // } else {
+    //   for (var i = 0; i < this.state.value.length; i++) {
+    //     console.log("Loop: " + this.state.value[i]);
+    //     if (this.state.value[i] === "" || this.state.value[i] === null || typeof (this.state.value[i] === 'empty') || typeof (this.state.value[i] === 'undefined')) {
+    //       flag = false;
+    //     }
+    //   }
+    // }
+
+
+    // console.log(this.state.value.length);
+
+
+    console.log(flag);
+    if (flag === false) {
+      this.setState({ alertVisible: true });
+    }
+    else if (flag === true) {
+      // console.log('Completed registration');
+      this.setState({ alertVisible: false });
+      // specieRef.push(specie);
+
+      this.setState({
+        showModal: true,
+        modalTitle: "Registro existoso",
+        modalBody: "Se registró la especie exitosamente",
+        modalButton: "Cerrar"
+      });
+    }
+
   }
   /* Adds dynamic Input */
   addClick() {
@@ -150,7 +209,6 @@ export default class SpeciesForm extends Component {
         </FormGroup>
       </div>
     );
-
     for (let i = 1; i < this.state.count; i++) {
       uiItems.push(
         <div key={i}>
@@ -209,7 +267,8 @@ export default class SpeciesForm extends Component {
                         onDrop={(e) => this.handleTreeUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
-                        <p>Drop files here.</p>
+                        <p>Arrastre la imágen aquí.</p>
+                        <Image width={150} height={150} src={this.state.treeURL} rounded responsive thumbnail={true}/>
                       </Dropzone>
                     </div>
                     <p>Imágen del árbol completo</p>
@@ -235,7 +294,7 @@ export default class SpeciesForm extends Component {
                         onDrop={(e) => this.handleTreeTrunkUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
-                        <p>Drop files here.</p>
+                        <p>Arrastre la imágen aquí.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen del tronco del árbol</p>
@@ -260,7 +319,7 @@ export default class SpeciesForm extends Component {
                         onDrop={(e) => this.handleTreeLeafUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
-                        <p>Drop files here.</p>
+                        <p>Arrastre la imágen aquí.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen de la hoja del árbol</p>
@@ -285,7 +344,7 @@ export default class SpeciesForm extends Component {
                         onDrop={(e) => this.handleTreeFruitUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
-                        <p>Drop files here.</p>
+                        <p>Arrastre la imágen aquí.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen de la semilla/fruto del árbol</p>
@@ -310,7 +369,7 @@ export default class SpeciesForm extends Component {
                         onDrop={(e) => this.handleTreeFlowerUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
-                        <p>Drop files here.</p>
+                        <p>Arrastre la imágen aquí.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen de la flor del árbol</p>
@@ -335,7 +394,7 @@ export default class SpeciesForm extends Component {
                         onDrop={(e) => this.handleTreeRootUpload(e)}
                         accept="image/jpeg, image/png"
                         multiple={false}>
-                        <p>Drop files here.</p>
+                        <p>Arrastre la imágen aquí.</p>
                       </Dropzone>
                     </div>
                     <p>Imágen de la raíz del árbol</p>
@@ -355,14 +414,27 @@ export default class SpeciesForm extends Component {
             </FormGroup>
             <FormGroup>
               <Button bsStyle="success" bsSize="large" type="submit" onClick={this.registerSpecie} block >Guardar</Button>&nbsp;
+              {this.state.alertVisible ? <MyAlert className='warningText'
+                title="Elementos faltantes"
+                message="Por favor asegurese que todos los campos estén completos y que todas las imágenes hayan sido agregadas antes de continuar."
+                bsStyle="danger" /> : null}
+            </FormGroup>
+            <FormGroup>
+              <Row>
+                <Col xs={12} md={12} lg={12}>
+                  <SpeciesList />
+                  {/* <CustomModal show={true} title={"Hey"} message={"Especie registrada existosamente"}/> */}
+                </Col>
+              </Row>
             </FormGroup>
           </Panel>
+
         </form>
       </div >
     );
   }
 
-  //Handle File selection
+  /*Handles File selection*/
   onDrop(acceptedFile, rejectedFile) {
     if (acceptedFile.length >= 1) {
       console.log(acceptedFile[0].name);
@@ -377,7 +449,6 @@ export default class SpeciesForm extends Component {
       window.URL.revokeObjectURL(rejectedFile.preview);
     }
   }
-
   uploadImage(file, dropzoneIdentifier) {
     var storageRef = firebase.storage().ref('Species/' + file.name);
     var uploadTask = storageRef.put(file);
@@ -500,7 +571,6 @@ export default class SpeciesForm extends Component {
     });
   }
   removeFile() {
-
   }
   //Image Upload Event Handlers
   handleTreeUpload(file) {
@@ -540,3 +610,4 @@ export default class SpeciesForm extends Component {
 
   }
 }
+

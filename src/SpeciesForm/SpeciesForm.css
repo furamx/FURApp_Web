@@ -29,3 +29,12 @@
 .dynamic-button{
     width: 50px;
 }
+
+* {
+    box-sizing: border-box;
+}
+
+.warningText {
+    text-align: justify;
+    text-justify: inter-word;
+}
