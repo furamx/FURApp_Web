@@ -2,29 +2,38 @@ import React, { Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 export default class MyModal extends Component {
-    constructor(...args) {
-        super(...args);
+    constructor(props) {
+        super(props);
 
         // this.handleShow = this.handleShow.bind(this);
         // this.handleHide = this.handleHide.bind(this);
 
-        this.state = { show: false };
+        this.handleShow = this.handleShow.bind(this);
+        this.handleHide = this.handleHide.bind(this);
+
+        this.state = { show: this.props.show };
+    }
+
+    handleShow() {
+        this.setState({ show: true });
+    }
+
+    handleHide() {
+        this.setState({ show: false });
     }
 
     render() {
         return (
             <div className="static-modal">
-                <Modal.Dialog>
-                    <Modal.Header>
+                <Modal keyboard={true} animation={true} show={this.state.show} onHide={this.handleHide}>
+                    <Modal.Header closeButton={true}>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-
                     <Modal.Body>{this.props.message}</Modal.Body>
-
                     <Modal.Footer>
-                        <Button onClick={() => { this.setState({ show: false }) }}>{this.props.button}</Button>
+                        <Button bsStyle="success" onClick={this.handleHide}>{this.props.button} </Button>
                     </Modal.Footer>
-                </Modal.Dialog>
+                </Modal>
             </div>
         );
     }
