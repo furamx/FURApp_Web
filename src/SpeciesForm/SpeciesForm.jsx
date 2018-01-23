@@ -23,13 +23,13 @@ export default class SpeciesForm extends Component {
     super(props);
     this.state = {
       alertVisible: false,
-      scientificName: null,
-      treeURL: null,
-      treeTrunkURL: null,
-      treeLeafURL: null,
-      treeFruitURL: null,
-      treeFlowerURL: null,
-      treeRootURL: null,
+      scientificName: '',
+      treeURL: '',
+      treeTrunkURL: '',
+      treeLeafURL: '',
+      treeFruitURL: '',
+      treeFlowerURL: '',
+      treeRootURL: '',
       value: [],
       count: 1,
       accepted: [],
@@ -84,8 +84,65 @@ export default class SpeciesForm extends Component {
     this.handleTreeFruitUpload = this.handleTreeFruitUpload.bind(this);
     this.handleTreeFlowerUpload = this.handleTreeFlowerUpload.bind(this);
     this.handleTreeRootUpload = this.handleTreeRootUpload.bind(this);
-    //this.handleShow = this.handleShow.bind(this);
-    //this.handleHide = this.handleHide.bind(this);
+    this.resetForm = this.resetForm.bind(this);
+  }
+
+  resetForm() {
+    alert('reset form');
+    this.setState({
+      scientificName: '',
+      treeURL: '',
+      treeTrunkURL: '',
+      treeLeafURL: '',
+      treeFruitURL: '',
+      treeFlowerURL: '',
+      treeRootURL: '',
+      value: [],
+      count: 1,
+      accepted: [],
+      rejected: [],
+      files: [],
+      treeFlowerProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeFruitProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeLeafProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeRootProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      treeTrunkProgress: {
+        progress: 0,
+        hidden: true,
+        disabled: true
+      },
+      buttonOne: true,
+      buttonTwo: true,
+      buttonThree: true,
+      buttonFour: true,
+      buttonFive: true,
+      buttonSix: true,
+      showModal: false
+    });
+
+    console.log('form was reset');
+    console.log(this.state);
   }
 
   handleChange(i, event) {
@@ -116,7 +173,7 @@ export default class SpeciesForm extends Component {
     console.log(flag);
     console.log(this.state.value);
     if (this.state.scientificName === null ||
-      this.state.scientificName === "" ||
+      this.state.scientificName === '' ||
       this.state.value.length <= 0 ||
       this.state.treeTrunkURL === null ||
       this.state.treeLeafURL === null ||
@@ -124,7 +181,7 @@ export default class SpeciesForm extends Component {
       this.state.treeFlowerURL === null ||
       this.state.treeRootURL === null ||
       this.state.value[0] === null ||
-      this.state.value[0] === "") {
+      this.state.value[0] === '') {
       flag = false;
     }
     if (flag === false) {
@@ -134,6 +191,7 @@ export default class SpeciesForm extends Component {
       console.log('Completed registration');
       this.setState({ alertVisible: false, showModal: true });
       specieRef.push(specie);
+      this.resetForm();
     }
 
   }
@@ -215,18 +273,20 @@ export default class SpeciesForm extends Component {
             <FormGroup>
               <PageHeader>Registrar nueva especie <small>Árbol</small></PageHeader>
             </FormGroup>
+            {this.createUI()}
             <FormGroup bsSize="large">
               <h4><ControlLabel className="ControlLabel"> Nombre científico</ControlLabel></h4>
               <br /><br />
               <FormControl type="text"
+                value={this.state.scientificName}
                 placeholder="nombre científico de la especie"
-                onChange={event => this.setState({ scientificName: event.target.value })}
+                onChange={event => this.setState({ scientificName: event.target.value })
+              }
               />
             </FormGroup>
-            {this.createUI()}
             <FormGroup>
               <Row>
-                <Col xs={12} md={4} lg={2}>
+                <Col xs={12} md={6} lg={4}>
                   <Thumbnail className="thumbnails">
                     <h3>Árbol completo</h3>
                     <div className="upload-dropzone">
@@ -257,7 +317,7 @@ export default class SpeciesForm extends Component {
                       label={`${this.state.treeProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
-                <Col xs={12} md={4} lg={2}>
+                <Col xs={12} md={6} lg={4}>
                   <Thumbnail className="thumbnails">
                     <h3>Tronco</h3>
                     <div className="upload-dropzone">
@@ -288,7 +348,7 @@ export default class SpeciesForm extends Component {
                       label={`${this.state.treeTrunkProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
-                <Col xs={12} md={4} lg={2}>
+                <Col xs={12} md={6} lg={4}>
                   <Thumbnail className="thumbnails">
                     <h3>Hoja</h3>
                     <div className="upload-dropzone">
@@ -319,7 +379,7 @@ export default class SpeciesForm extends Component {
                       label={`${this.state.treeLeafProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
-                <Col xs={12} md={4} lg={2}>
+                <Col xs={12} md={6} lg={4}>
                   <Thumbnail className="thumbnails">
                     <h3>Semilla / Fruto</h3>
                     <div className="upload-dropzone">
@@ -350,7 +410,7 @@ export default class SpeciesForm extends Component {
                       label={`${this.state.treeFruitProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
-                <Col xs={12} md={4} lg={2}>
+                <Col xs={12} md={6} lg={4}>
                   <Thumbnail className="thumbnails">
                     <h3>Flor</h3>
                     <div className="upload-dropzone">
@@ -381,7 +441,7 @@ export default class SpeciesForm extends Component {
                       label={`${this.state.treeFlowerProgress.progress}%`} />
                   </Thumbnail>
                 </Col>
-                <Col xs={12} md={4} lg={2}>
+                <Col xs={12} md={6} lg={4}>
                   <Thumbnail className="thumbnails">
                     <h3>Raíz</h3>
                     <div className="upload-dropzone">

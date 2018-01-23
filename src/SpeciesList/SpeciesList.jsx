@@ -13,28 +13,20 @@ export default class SpeciesList extends Component {
 
     componentWillMount() {
         const specieRef = firebase.database().ref("species").orderByKey();
-        specieRef.once("value").then(
-            (snapshot) => {
-                snapshot.forEach(
-                    (childSnapshot) => {
-                        let specie = { specie: childSnapshot.val(), id: childSnapshot.key };
-                        this.setState({ species: [specie].concat(this.state.species) });
-                    }
-                );
-            });
-
-        // specieRef.on('value', (snapshot) => {
-        //     // let specie = { specie: snapshot.val(), id: snapshot.key };
-        //     // this.setState({ species: [specie].concat(this.state.species) });
-        // });
-
-        // specieRef.on("value", (snapshot) => {
+        // specieRef.once("value").then(
+        //     (snapshot) => {
         //         snapshot.forEach(
         //             (childSnapshot) => {
         //                 let specie = { specie: childSnapshot.val(), id: childSnapshot.key };
         //                 this.setState({ species: [specie].concat(this.state.species) });
-        //         });
-        // });
+        //             }
+        //         );
+        //     });
+
+            specieRef.on('child_added', (data)=> {
+                let specie = { specie: data.val(), id: data.key };
+                this.setState({ species: [specie].concat(this.state.species) });
+            });
 
     }
     componentDidMount() {
@@ -48,8 +40,8 @@ export default class SpeciesList extends Component {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Nombre Científico</th>
                             <th>Nombre Común</th>
+                            <th>Nombre Científico</th>
                             <th>Imágenes</th>
                         </tr>
                     </thead>
@@ -63,21 +55,20 @@ export default class SpeciesList extends Component {
     /* Creates the table that shows registered species*/
     createUITable() {
         let uiItems = [];
-
         for (let i = 0; i < this.state.species.length; i++) {
             uiItems.push(
                 <tr key={this.state.species[i].id}>
                     <td>{i + 1}</td>
-                    <td>{this.state.species[i].specie.scientificName}</td>
                     <td>
                         <ListGroup>
                             {
                                 this.state.species[i].specie.commonNames.map((listValue) => {
-                                    return <ListGroupItem key={listValue}>{listValue}</ListGroupItem>
+                                    return <ListGroupItem key={listValue+i}>{listValue}</ListGroupItem>
                                 })
                             }
                         </ListGroup>
                     </td>
+                    <td>{this.state.species[i].specie.scientificName}</td>
                     <td>
                         <Carousel
                             slide={false}
