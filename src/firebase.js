@@ -2,16 +2,14 @@ import firebase from 'firebase';
 
 // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyCyR_zMAI8jKUiEUcgfmi5OBLJFDLlpEvQ",
-    authDomain: "furappweb.firebaseapp.com",
-    databaseURL: "https://furappweb.firebaseio.com",
-    projectId: "furappweb",
-    storageBucket: "furappweb.appspot.com",
-    messagingSenderId: "715319395621"
-};
-firebase.initializeApp(config);
+    apiKey: "AIzaSyARaUyPLbss1R4zD7z5d4996MfZp92esOQ",
+    authDomain: "furapp-f835b.firebaseapp.com",
+    databaseURL: "https://furapp-f835b.firebaseio.com",
+    projectId: "furapp-f835b",
+    storageBucket: "furapp-f835b.appspot.com",
+    messagingSenderId: "408910772025"
+  };
 
-// Firebase storage reference
-// var storage = firebase.storage();
+firebase.initializeApp(config);
 
 export default firebase;

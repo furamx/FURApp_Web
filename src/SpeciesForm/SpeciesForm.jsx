@@ -88,7 +88,6 @@ export default class SpeciesForm extends Component {
   }
 
   resetForm() {
-    alert('reset form');
     this.setState({
       scientificName: '',
       treeURL: '',
@@ -141,8 +140,7 @@ export default class SpeciesForm extends Component {
       showModal: false
     });
 
-    console.log('form was reset');
-    console.log(this.state);
+
   }
 
   handleChange(i, event) {
@@ -168,10 +166,7 @@ export default class SpeciesForm extends Component {
       }
     }
 
-    console.log(specie);
     var flag = true;
-    console.log(flag);
-    console.log(this.state.value);
     if (this.state.scientificName === null ||
       this.state.scientificName === '' ||
       this.state.value.length <= 0 ||
@@ -188,7 +183,6 @@ export default class SpeciesForm extends Component {
       this.setState({ alertVisible: true });
     }
     else if (flag === true) {
-      console.log('Completed registration');
       this.setState({ alertVisible: false, showModal: true });
       specieRef.push(specie);
       this.resetForm();
@@ -261,7 +255,7 @@ export default class SpeciesForm extends Component {
   }
 
   componentDidMount() {
-    //console.log('component did mount');
+   
   }
 
   /* Renders UI */
@@ -507,10 +501,8 @@ export default class SpeciesForm extends Component {
   /*Handles File selection*/
   onDrop(acceptedFile, rejectedFile) {
     if (acceptedFile.length >= 1) {
-      console.log(acceptedFile[0].name);
     } else if (rejectedFile.length >= 1) {
       alert("Invalid File");
-      console.log(rejectedFile[0].name);
       window.URL.revokeObjectURL(rejectedFile.preview);
     }
   }
@@ -583,7 +575,7 @@ export default class SpeciesForm extends Component {
           }));
           break;
         default:
-          console.log("meh");
+          console.log("Error");
           break;
       }
       switch (snapshot.state) {
@@ -594,7 +586,7 @@ export default class SpeciesForm extends Component {
           console.log('Upload is running');
           break;
         default:
-          console.log('SHIT');
+          console.log('Something went wrong');
           break;
       }
     }, (error) => {
@@ -603,32 +595,24 @@ export default class SpeciesForm extends Component {
     }, () => {
       // Handle successful uploads on complete
       var downloadURL = uploadTask.snapshot.downloadURL;
-      console.log(uploadTask.snapshot);
-      // alert(downloadURL);
       switch (dropzoneIdentifier) {
         case 1:
           this.setState({ treeURL: downloadURL, buttonOne: false });
-          console.log(this.state.treeURL);
           break;
         case 2:
           this.setState({ treeTrunkURL: downloadURL, buttonTwo: false });
-          console.log(this.state.treeTrunkURL);
           break;
         case 3:
           this.setState({ treeLeafURL: downloadURL, buttonThree: false });
-          console.log(this.state.treeLeafURL);
           break;
         case 4:
           this.setState({ treeFruitURL: downloadURL, buttonFour: false });
-          console.log(this.state.treeFruitURL);
           break;
         case 5:
           this.setState({ treeFlowerURL: downloadURL, buttonFive: false });
-          console.log(this.state.treeFlowerURL);
           break;
         case 6:
           this.setState({ treeRootURL: downloadURL, buttonSix: false });
-          console.log(this.state.treeRootURL);
           break;
         default:
           console.log('error');
@@ -638,13 +622,12 @@ export default class SpeciesForm extends Component {
   }
   /*Removes Image/File from Firebase storage*/
   removeFile(fileURL, id) {
-    console.log(fileURL, id);
     if (fileURL !== null) {
       // var storageRef = firebase.storage().ref('Species/' + file.name);
       var httpsReference = firebase.storage().refFromURL(fileURL);
       httpsReference.delete().then(function (id) {
         // File deleted successfully
-        console.log("File Removed " + id);
+        // console.log("File Removed " + id);
       }).catch(function (error) {
         console.log(error)
       });
