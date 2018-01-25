@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color:#F9F9F9 
 }
 
 .App-logo {
@@ -8,7 +9,7 @@
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #F9F9F9;
   height: 150px;
   padding: 20px;
   color: white;
@@ -21,6 +22,20 @@
 .App-intro {
   font-size: large;
 }
+.form    {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  background-color:#FFFFFF;
+  padding:  20px;
+ }
+
+ .Label {
+   align-content: left;
+   font-size: 340px;
+   color: red;
+ }
+
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

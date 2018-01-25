@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "firebase": "^4.7.0",
+    "firebase": "^4.8.0",
+    "griddle-react": "^1.11.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.2.0",
+    "react-dropzone": "^4.2.3",
+    "react-form": "^2.14.1",
     "react-scripts": "1.0.17"
   },
   "scripts": {
@@ -31,5 +34,5 @@
   "bugs": {
     "url": "https://github.com/lalo2302/FURApp_Web/issues"
   },
-  "homepage": "https://github.com/lalo2302/FURApp_Web#readme"
+  "homepage": "/build/static/js/main.js"
 }
