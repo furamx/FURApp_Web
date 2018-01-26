@@ -263,7 +263,7 @@ export default class SpeciesForm extends Component {
     return (
       <div >
         <form className="form" onSubmit={this.handleSubmit}>
-          <Panel>
+          <Panel className="Panel">
             <FormGroup>
               <PageHeader>Registrar nueva especie <small>Árbol</small></PageHeader>
             </FormGroup>
