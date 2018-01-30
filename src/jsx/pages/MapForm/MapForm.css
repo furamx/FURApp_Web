@@ -1,0 +1,77 @@
+* {
+    box-sizing: border-box;
+}
+
+.Panel {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    background-color: #FFFFFF;
+    padding: 20px;
+}
+
+.PageHeader{
+    background-color: #FFFFFF;
+    
+    left: 5%;
+    right: 5%;
+}
+
+.PanelHeader {
+    text-align: left;
+    
+}
+
+.DropdownButton{
+    width: 100%;
+    /* background-color: blue; */
+    margin-top: 20px;
+    align-content: right;
+    text-align: right;
+}
+
+
+/* .ImageDropzone{
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.ControlLabel{
+    float: left;
+    font-size: 1.2em;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.upload-dropzone{
+    display: inline-flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    margin-top: 10px
+}
+
+.thumbnails{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto
+    
+}
+
+.dynamic-button{
+    width: 50px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.Panel{
+    margin-top: 50px
+}
+
+.warningText {
+    text-align: justify;
+    text-justify: inter-word;
+} */

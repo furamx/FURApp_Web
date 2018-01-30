@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Button, InputGroup, Image, FormControl, Modal, FormGroup, ControlLabel, Row, Col, Thumbnail, PageHeader, Panel, ProgressBar } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 import './SpeciesForm.css';
-import addIcon from './../Images/Icons/add_1x.png'
-import removeIcon from './../Images/Icons/remove_1x.png'
-import firebase from './../firebase.js';
+import addIcon from './../../../Images/Icons/add_1x.png';
+import removeIcon from './../../../Images/Icons/remove_1x.png'
+import firebase from './../../../firebase.js';
 import MyAlert from './../Alerts/Alert';
 import SpeciesList from './../SpeciesList/SpeciesList';
 // import CustomModal from './../Modals/Modals';

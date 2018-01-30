@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, PageHeader, ListGroup, ListGroupItem, Carousel } from 'react-bootstrap';
-import firebase from './../firebase.js';
+import firebase from './../../../firebase.js';
 
 export default class SpeciesList extends Component {
     constructor(props) {
