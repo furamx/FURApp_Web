@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import L from 'leaflet';
 import Draw from 'leaflet-draw'
 import './MapComponent.css'
-import { Button } from 'react-bootstrap';
+import { Button, Row, Col, FormGroup, FormControl } from 'react-bootstrap';
 // import ReactDOM from 'react-dom';
+import MapList from './../MapListComponent/MapListComponent';
 
 export default class MyMap extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            drawable: true
+        this.state = {
+            drawable: true,
+            dropdownTitle: 'Eventos',
+            mapName: ''
         }
     }
     componentDidMount() {
@@ -71,10 +74,44 @@ export default class MyMap extends Component {
     render() {
         return (
             <div>
-                <div id="map" className="Map"></div>
-                <Button className="Button" onClick={() => this.setState({ drawable: true })}bsStyle="success" bsSize="large" type="submit" block >Guardar</Button>&nbsp;
+                <Row>
+                    <Col xs={12} md={12} lg={10}>
+                        <div id="map" className="Map"></div>
+                    </Col>
+                    <Col xs={12} md={12} lg={2}>
+                        <MapList/>
+                    </Col>
+                </Row>
+                <Row className='Row'>
+                    <Col xs={12} md={6} lg={10}>
+                        <FormGroup>
+                            <FormControl
+                                type="text"
+                                bsSize="large"
+                                value={this.state.mapName}
+                                onChange={(e) => this.setState({ mapName: e.target.value })}
+                                placeholder='Nombre de la zona'
+                            >
+                            </FormControl>
+                        </FormGroup>
+                    </Col>
+                    <Col xs={12} md={6} lg={2}>
+                        <FormGroup bsSize='large'>
+                            <FormControl componentClass="select" placeholder='Eventos' >
+                                <option value="Eventos">Eventos</option>
+                                <option value="other">Evento Facebook #1</option>
+                                <option value="other">Evento Facebook #2</option>
+                                <option value="other">Evento Facebook #3</option>
+                            </FormControl>
+                        </FormGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={12} md={12} lg={12}>
+                        <Button className="Button" onClick={() => this.setState({ drawable: true })} bsStyle="success" bsSize="large" type="submit" block >Guardar</Button>&nbsp;
+                    </Col>
+                </Row>
             </div>
-
         );
     }
 }

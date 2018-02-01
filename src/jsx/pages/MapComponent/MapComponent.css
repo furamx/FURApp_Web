@@ -4,5 +4,13 @@
 }
 .Button{
     text-align: center;
+    margin-top: 10px;
+}
+
+.Row{
     margin-top: 20px;
+}
+
+.Dropdown{
+    width: 100%;
 }
