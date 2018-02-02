@@ -1,5 +1,10 @@
-.ListDiv {
+.ListDiv { display: 'block'; }
+
+.ListPanel{
+    height: 500px;
     overflow-y: scroll;
-    height: 'inherit';
-    display: 'block';
+}
+
+.ListPanelItem{
+    margin-top: 5px;
 }

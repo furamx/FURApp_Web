@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
-import Draw from 'leaflet-draw'
+import Draw from 'leaflet-draw';
 import './MapComponent.css'
-import { Button, Row, Col, FormGroup, FormControl } from 'react-bootstrap';
-// import ReactDOM from 'react-dom';
+import { Button, Row, Col, FormGroup, FormControl, Panel, PanelGroup } from 'react-bootstrap';
 import MapList from './../MapListComponent/MapListComponent';
+
 
 export default class MyMap extends Component {
 
@@ -13,7 +13,8 @@ export default class MyMap extends Component {
         this.state = {
             drawable: true,
             dropdownTitle: 'Eventos',
-            mapName: ''
+            mapName: '',
+            hidden: true
         }
     }
     componentDidMount() {
@@ -44,7 +45,7 @@ export default class MyMap extends Component {
         map.on(L.Draw.Event.CREATED, (e) => {
             var type = e.layerType,
                 layer = e.layer;
-            console.log(map.layers);
+            console.log(layer);
             // Do whatever else you need to. (save to db; add to map etc)
             map.addLayer(layer);
         });
@@ -79,10 +80,38 @@ export default class MyMap extends Component {
                         <div id="map" className="Map"></div>
                     </Col>
                     <Col xs={12} md={12} lg={2}>
-                        <MapList/>
+                        <MapList />
                     </Col>
                 </Row>
                 <Row className='Row'>
+                    <Col xs={12} md={12} lg={12}>
+                        <PanelGroup>
+                            <Panel id="collapsible-panel-1" expanded={this.props.open}>
+                                <Panel.Collapse>
+                                    <Panel.Body>
+                                        {/* Anim pariatur cliche reprehenderit, enim eiusmod high life
+                                        accusamus terry richardson ad squid. Nihil anim keffiyeh
+                                        helvetica, craft beer labore wes anderson cred nesciunt sapiente
+                                        ea proident. */}
+                                        <Zones/>
+                                    </Panel.Body>
+                                </Panel.Collapse>
+                            </Panel>
+                            <Panel id="collapsible-panel-2" expanded={this.props.open}>
+                                <Panel.Collapse>
+                                    <Panel.Body>
+                                        {/* Anim pariatur cliche reprehenderit, enim eiusmod high life
+                                        accusamus terry richardson ad squid. Nihil anim keffiyeh
+                                        helvetica, craft beer labore wes anderson cred nesciunt sapiente
+                                        ea proident. */}
+                                        <Zones/>
+                                    </Panel.Body>
+                                </Panel.Collapse>
+                            </Panel>
+                        </PanelGroup>
+                    </Col>
+                </Row>
+                <Row className='Row' hidden={this.state.hidden}>
                     <Col xs={12} md={6} lg={10}>
                         <FormGroup>
                             <FormControl
@@ -106,7 +135,7 @@ export default class MyMap extends Component {
                         </FormGroup>
                     </Col>
                 </Row>
-                <Row>
+                <Row hidden={this.state.hidden}>
                     <Col xs={12} md={12} lg={12}>
                         <Button className="Button" onClick={() => this.setState({ drawable: true })} bsStyle="success" bsSize="large" type="submit" block >Guardar</Button>&nbsp;
                     </Col>
@@ -114,4 +143,10 @@ export default class MyMap extends Component {
             </div>
         );
     }
+}
+
+const Zones = () => {
+    return (
+        <div>Hello there</div>
+    );
 }

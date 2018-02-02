@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 // import { Panel, PageHeader, PanelGroup, Button, Image, DropdownButton, MenuItem, Row, Col } from 'react-bootstrap';
-import { Panel, PageHeader, PanelGroup } from 'react-bootstrap';
+import { Panel, PageHeader, PanelGroup, Button, Image, Row, Col } from 'react-bootstrap';
 
 import './MapForm.css';
 // import addIcon from './../../../Images/Icons/add_1x.png';
 import MyMap from './../MapComponent/MapComponent';
+import addIcon from './../../../Images/Icons/add_1x.png';
+import removeIcon from './../../../Images/Icons/remove_1x.png'
 
 
 export default class Map extends Component {
@@ -12,46 +14,43 @@ export default class Map extends Component {
         super(props);
         this.state = {
             panelTitle: "Mapa",
-            dropdownTitle: "Eventos"
+            dropdownTitle: "Eventos",
+            open: false
         }
     }
 
     componentWillMount() {
-        
+
     }
     componentDidMount() {
-        
+
     }
 
     render() {
         return (
             <div>
-                <PageHeader className="PageHeader">Zonas <small>Mis zonas</small></PageHeader>
+                <PageHeader className="PageHeader">Áreas<small> zonas</small></PageHeader>
                 <PanelGroup accordion id="accordion-example" className="Panel">
                     <Panel eventKey="1" bsStyle="success">
                         <Panel.Heading className="PanelHeader">
-                            <Panel.Title toggle>{this.state.panelTitle}</Panel.Title>
+                            <Panel.Title>
+
+                                <Row>
+                                    <Col xs={8} md={10} lg={11}>
+                                        {this.state.panelTitle}
+                                    </Col>
+                                    <Col xs={4} md={2} lg={1} className="AddButton">
+                                        <Button block bsStyle={this.state.open ? "danger" : "success"} onClick={(e) => this.setState({ open: !this.state.open })}>
+                                            <Image src={this.state.open ? removeIcon : addIcon} />
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Panel.Title>
                         </Panel.Heading>
                         <Panel.Body>
-                            <MyMap/>
+                            <MyMap open={this.state.open} />
                         </Panel.Body>
                     </Panel>
-                    {/* <Panel eventKey="2" bsStyle="success">
-                        <Panel.Heading>
-                            <Panel.Title toggle>+</Panel.Title>
-                        </Panel.Heading>
-                        <Panel.Body collapsible>
-                            <Row>
-                                <Col xs={12} md={12} lg={12} className="DropdownButton">
-                                    <DropdownButton title={this.state.dropdownTitle} bsSize="large" bsStyle="success" >
-                                        <MenuItem eventKey="1">Evento Facebook #1</MenuItem>
-                                        <MenuItem eventKey="2">Evento Facebook #2</MenuItem>
-                                        <MenuItem eventKey="3">Evento Facebook #3</MenuItem>
-                                    </DropdownButton>
-                                </Col>
-                            </Row>
-                        </Panel.Body>
-                    </Panel> */}
                 </PanelGroup>
             </div>
         );
