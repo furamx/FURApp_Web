@@ -15,3 +15,11 @@
 .Dropdown{
     width: 100%;
 }
+
+.ControlLabel{
+    text-align: left;
+}
+.PanelHeader {
+    text-align: left;
+    
+}
