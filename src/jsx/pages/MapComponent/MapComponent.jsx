@@ -26,6 +26,8 @@ export default class MyMap extends Component {
         this.createZone = this.createZone.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.removeClick = this.removeClick.bind(this);
+        this.handleArea = this.handleArea.bind(this);
+        this.clearLayers = this.clearLayers.bind(this);
     }
 
     handleAreaSubmit(e) {
@@ -82,6 +84,15 @@ export default class MyMap extends Component {
         return zones;
     }
 
+    handleArea(areaLayer, areaName){
+        console.log(areaLayer.toGeoJSON());
+        console.log(areaName);
+    }
+
+    clearLayers(){
+        // map.clearLayers();
+    }
+
     componentDidMount() {
 
         var map = L.map('map').setView([21.1523342, -101.7135019], 13);
@@ -97,37 +108,16 @@ export default class MyMap extends Component {
 
         var drawControl = new L.Control.Draw({
             draw: this.state.drawable,
-            position: 'topright',
+            position: 'topleft',
             edit: {
                 featureGroup: drawnItems,
                 edit: true,
-                remove: false
+                remove: true
             }
         });
 
-        map.addControl(drawControl);
+        
 
-        map.on(L.Draw.Event.CREATED, (e) => {
-            var type = e.layerType,
-                layer = e.layer;
-            console.log(layer);
-            // Do whatever else you need to. (save to db; add to map etc)
-            map.addLayer(layer);
-        });
-
-        // map.on(L.Draw.Event.EDITED, (e) => {
-        //     var type = e.layerType,
-        //         layer = e.layer;
-        //     console.log(layer);
-        //     // Do whatever else you need to. (save to db; add to map etc)
-        //     map.addLayer(layer);
-        // });
-
-        // var map = L.map('map', {drawControl: true}).setView([51.505, -0.09], 13);
-        // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        //     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        // }).addTo(map);
-        // FeatureGroup is to store editable layers
         // var drawnItems = new L.FeatureGroup();
         // map.addLayer(drawnItems);
         // var drawControl = new L.Control.Draw({
@@ -135,7 +125,28 @@ export default class MyMap extends Component {
         //         featureGroup: drawnItems
         //     }
         // });
-        // map.addControl(drawControl);
+
+        map.on(L.Draw.Event.CREATED, (e) => {
+            var type = e.layerType,
+                layer = e.layer;
+            // map.addLayer(layer);
+            // this.handleArea(layer,"Thomas");
+            drawnItems.addLayer(layer);
+            console.log(drawnItems);
+        });
+
+        map.on(L.Draw.Event.EDITED, (e) => {
+            alert('Layer edited');
+            console.log(e);
+        });
+
+        map.on(L.Draw.Event.DELETED, (e) => {
+            console.log(e);
+            alert('Layer deleted');
+        });
+
+
+        map.addControl(drawControl);
     }
 
     render() {
