@@ -2,51 +2,115 @@ import React, { Component } from 'react';
 import L from 'leaflet';
 import Draw from 'leaflet-draw';
 import './MapComponent.css'
-import { Button, Row, Col, FormGroup, FormControl, Panel, PanelGroup, ControlLabel, Glyphicon, InputGroup } from 'react-bootstrap';
+import { Button, Row, Col, FormGroup, FormControl, Panel, PanelGroup, ControlLabel, Glyphicon, InputGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import MapList from './../MapListComponent/MapListComponent';
+import firebase from './../../../firebase.js';
+import * as facebook from './../../../facebook.js';
 
-
+var map, drawnItems, drawControl;
 export default class MyMap extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            drawable: true,
-            dropdownTitle: 'Eventos',
-            mapName: '',
-            hidden: true,
             areaName: '',
-            panelOpen: false,
             value: [],
-            count: 5
+            layers: [],
+            count: 0
         }
 
         this.handleAreaSubmit = this.handleAreaSubmit.bind(this);
-        this.handleZonesSubmit = this.handleZonesSubmit.bind(this);
         this.createZone = this.createZone.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.removeClick = this.removeClick.bind(this);
-        this.handleArea = this.handleArea.bind(this);
-        this.clearLayers = this.clearLayers.bind(this);
+
+        this.drawMap = this.drawMap.bind(this);
+        this.removeAllLayers = this.removeAllLayers.bind(this);
+        this.addControl = this.addControl.bind(this);
+        this.removeControl = this.removeControl.bind(this);
+        // this.getEvents = this.getEvents.bind(this);
+
+        // this.loadArea = this.loadArea.bind(this);
+        // this.saveArea = this.saveArea.bind(this);
     }
 
+    // getEvents(){
+    //     fb.getEvents();
+    // }
+    // loadArea(){
+    // //http://leafletjs.com/examples/geojson/
+    // }
+    // saveArea(){
+
+    // }
+
+    /*Handles form submission*/
     handleAreaSubmit(e) {
         e.preventDefault();
-        alert('area submited');
-        this.setState({ panelOpen: true });
+
+        if (navigator.onLine) {
+
+
+
+            // var area = {
+            //     areaName: '',
+            //     areaLocation: null,
+            //     areaPerimiter: 'geoJSON',
+            //     zones: []
+            // }
+
+            // var zones = [];
+            // var zone = {
+            //     zoneName: '',
+            //     zonePerimiter: 'geoJSON',
+            // }
+
+            // area.Name = this.state.areaName;
+
+            // alert(area.Name);
+
+            // alert(this.state.layers.length);
+
+            // console.log("DRAWN ITEMS");
+            // drawnItems.eachLayer((layer) => {
+            //     // console.log(layer.getCenter());
+            //     console.log(layer);
+            // });
+
+            // alert(drawnItems.getLayers().length)
+            var layers = drawnItems.getLayers();
+
+            var area = {};
+            area.name = this.state.areaName;
+            area.location = layers[0].getCenter();
+            area.perimeter = layers[0].toGeoJSON();
+            area.zones = [];
+
+            //console.log(area);
+
+
+            console.log(layers.length);
+            // for (let i = 1; i <= layers.lenth; i++) {
+            //     console.log(layers[i]);
+            // }
+            // alert(layers.length);
+            // console.log(layers[0].getCenter());
+
+
+            // this.removeAllLayers();
+        } else {
+            alert('no connection');
+        }
     }
 
-    handleZonesSubmit(e) {
-        e.preventDefault();
-        alert('zones submited');
-    }
-
+    /* */
     handleChange(i, event) {
         let value = this.state.value.slice();
         value[i] = event.target.value;
         this.setState({ value });
     }
 
+    /* */
     removeClick(i) {
         let value = this.state.value.slice();
         value.splice(i, 1);
@@ -55,7 +119,7 @@ export default class MyMap extends Component {
             value
         })
     }
-
+    /* */
     createZone() {
         let zones = [];
         for (let i = 1; i < this.state.count; i++) {
@@ -84,18 +148,9 @@ export default class MyMap extends Component {
         return zones;
     }
 
-    handleArea(areaLayer, areaName){
-        console.log(areaLayer.toGeoJSON());
-        console.log(areaName);
-    }
-
-    clearLayers(){
-        // map.clearLayers();
-    }
-
-    componentDidMount() {
-
-        var map = L.map('map').setView([21.1523342, -101.7135019], 13);
+    /* Draws map*/
+    drawMap() {
+        map = L.map('map').setView([21.1523342, -101.7135019], 13);
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             id: 'mapbox.streets',
@@ -103,11 +158,11 @@ export default class MyMap extends Component {
             zoomControl: false
         }).addTo(map);
 
-        var drawnItems = new L.FeatureGroup();
+        drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
 
-        var drawControl = new L.Control.Draw({
-            draw: this.state.drawable,
+        drawControl = new L.Control.Draw({
+            draw: true,
             position: 'topleft',
             edit: {
                 featureGroup: drawnItems,
@@ -116,39 +171,55 @@ export default class MyMap extends Component {
             }
         });
 
-        
-
-        // var drawnItems = new L.FeatureGroup();
-        // map.addLayer(drawnItems);
-        // var drawControl = new L.Control.Draw({
-        //     edit: {
-        //         featureGroup: drawnItems
-        //     }
-        // });
-
         map.on(L.Draw.Event.CREATED, (e) => {
-            var type = e.layerType,
-                layer = e.layer;
-            // map.addLayer(layer);
-            // this.handleArea(layer,"Thomas");
+            var layer = e.layer;
+            // layer.bindPopup('Hello');
             drawnItems.addLayer(layer);
-            console.log(drawnItems);
+            // alert(layer.getCenter());
+            var nLayer = this.state.layers.slice();
+            nLayer.push(layer);
+            this.setState({ count: this.state.count + 1, layers: nLayer });
         });
 
         map.on(L.Draw.Event.EDITED, (e) => {
             alert('Layer edited');
-            console.log(e);
         });
 
         map.on(L.Draw.Event.DELETED, (e) => {
-            console.log(e);
+            this.setState({ count: this.state.count - 1 });
             alert('Layer deleted');
         });
-
 
         map.addControl(drawControl);
     }
 
+    /* */
+    componentDidMount() {
+        this.drawMap();
+        this.removeControl();
+        // alert(fb.getEvents());
+        // facebook.getFacebookEvents();
+    }
+
+    /* Clears all layers from map, resets count*/
+    removeAllLayers() {
+        drawnItems.eachLayer((layer) => { drawnItems.removeLayer(layer); });
+        this.removeControl();
+        this.setState({ count: 0, });
+        if (this.props.open) this.addControl();
+    }
+
+    /* Adds draw control to map*/
+    addControl() {
+        map.addControl(drawControl);
+    }
+
+    /* Removes draw control from map*/
+    removeControl() {
+        map.removeControl(drawControl);
+    }
+
+    /* Renders UI*/
     render() {
         return (
             <div>
@@ -165,101 +236,59 @@ export default class MyMap extends Component {
                         <PanelGroup id="panel-group-1" >
                             <Panel id="collapsible-panel-1" expanded={this.props.open} onToggle={this.props.open} eventKey="1" bsStyle="success">
                                 <Panel.Heading className="PanelHeader" hidden={!this.props.open}>
-                                    <Panel.Title>Área</Panel.Title>
+                                    <Panel.Title>Nueva área y zonas</Panel.Title>
                                 </Panel.Heading>
-                                <Panel.Body collapsible>
-                                    <form onSubmit={this.handleAreaSubmit}>
-                                        <Row className="ControlLabel">
-                                            <Col xs={12} md={12} lg={12} >
-                                                <ControlLabel >Ingrese el nombre del área</ControlLabel>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={12} md={12} lg={11} >
+                                <Panel.Collapse onEnter={() => { this.addControl(); }} onExiting={() => { this.removeAllLayers(); }}>
+                                    <Panel.Body >
+                                        <form onSubmit={this.handleAreaSubmit}>
+                                            <Row className="ControlLabel">
+                                                <Col xs={12} md={12} lg={12} >
+                                                    <ControlLabel >Ingrese el nombre del área:</ControlLabel>
+                                                </Col>
+                                            </Row>
+                                            <Row className="ControlLabel">
+                                                <Col xs={12} md={12} lg={12} >
+                                                    {this.state.count > 0 ?
+                                                        <FormGroup>
+                                                            <FormControl type="text"
+                                                                value={this.state.areaName}
+                                                                onChange={(e) => this.setState({ areaName: e.target.value })}
+                                                                placeholder="Nombre del área">
+                                                            </FormControl>
+                                                        </FormGroup> : "*No se ha delimitado un área"
+                                                    }
+                                                </Col>
+                                                {/* <Col xs={12} md={12} lg={1} >
                                                 <FormGroup>
-                                                    <FormControl type="text"
-                                                        value={this.state.areaName}
-                                                        onChange={(e) => this.setState({ areaName: e.target.value })}
-                                                        placeholder="Nombre del área">
-                                                    </FormControl>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col xs={12} md={12} lg={1} >
-                                                <FormGroup>
-                                                    {/* {
-                                                        this.state.panelOpen ?
-                                                            <Button bsStyle="danger" block bsSize="large" type="button" onClick={() => {this.setState({ panelOpen: false })}}>
-                                                                <Glyphicon glyph="glyphicon glyphicon-floppy-remove" />
-                                                            </Button> :
-                                                            <Button bsStyle="success" block bsSize="large" type="submit">
-                                                                <Glyphicon glyph="glyphicon glyphicon-floppy-disk" />
-                                                            </Button>
-                                                    } */}
                                                     <Button bsStyle="success" block type="submit">
                                                         <Glyphicon glyph="glyphicon glyphicon-floppy-disk" />
                                                     </Button>
                                                 </FormGroup>
-                                            </Col>
-                                        </Row>
-                                    </form>
-                                </Panel.Body>
-                            </Panel>
-                            <Panel id="collapsible-panel-2" expanded={this.state.panelOpen} onToggle={this.props.open} eventKey="2" bsStyle="success">
-                                <Panel.Heading className="PanelHeader" hidden={!this.props.open}>
-                                    <Panel.Title>Zonas</Panel.Title>
-                                </Panel.Heading>
-                                <Panel.Body collapsible>
-                                    <form onSubmit={this.handleZonesSubmit}>
-                                        <Row className="ControlLabel">
-                                            <Col xs={12} md={12} lg={12} >
-                                                <ControlLabel className="ControlLabel">Ingrese el nombre de las zonas</ControlLabel>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={12} md={12} lg={12} >
-                                                {this.createZone()}
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col xs={12} md={12} lg={12} >
-                                                <Button bsStyle="success" block type="submit">
-                                                    Guardar
+                                            </Col> */}
+                                            </Row>
+                                            <Row className="ControlLabel">
+                                                <Col xs={12} md={12} lg={12} >
+                                                    <ControlLabel className="ControlLabel">Ingrese el nombre de las zonas:</ControlLabel>
+                                                </Col>
+                                            </Row>
+                                            <Row className="ControlLabel">
+                                                <Col xs={12} md={12} lg={12} >
+                                                    {this.state.count > 1 ? this.createZone() : "*No se han delimitado zonas"}
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col xs={12} md={12} lg={12} className={"SaveButton"}>
+                                                    <Button bsStyle="success" block type="submit" disabled={this.state.count <= 0 ? true : false}>
+                                                        Guardar
                                                 </Button>
-                                            </Col>
-                                        </Row>
-                                    </form>
-                                </Panel.Body>
+                                             <Button onClick={facebook.getFacebookEvents()}>facebook</Button>
+                                                </Col>
+                                            </Row>
+                                        </form>
+                                    </Panel.Body>
+                                </Panel.Collapse>
                             </Panel>
                         </PanelGroup>
-                    </Col>
-                </Row>
-                <Row className='Row' hidden={this.state.hidden}>
-                    <Col xs={12} md={6} lg={10}>
-                        <FormGroup>
-                            <FormControl
-                                type="text"
-                                bsSize="large"
-                                value={this.state.mapName}
-                                onChange={(e) => this.setState({ mapName: e.target.value })}
-                                placeholder='Nombre de la zona'
-                            >
-                            </FormControl>
-                        </FormGroup>
-                    </Col>
-                    <Col xs={12} md={6} lg={2}>
-                        <FormGroup bsSize='large'>
-                            <FormControl componentClass="select" placeholder='Eventos' >
-                                <option value="Eventos">Eventos</option>
-                                <option value="other">Evento Facebook #1</option>
-                                <option value="other">Evento Facebook #2</option>
-                                <option value="other">Evento Facebook #3</option>
-                            </FormControl>
-                        </FormGroup>
-                    </Col>
-                </Row>
-                <Row hidden={this.state.hidden}>
-                    <Col xs={12} md={12} lg={12}>
-                        <Button className="Button" onClick={() => this.setState({ drawable: true })} bsStyle="success" bsSize="large" type="submit" block >Guardar</Button>&nbsp;
                     </Col>
                 </Row>
             </div>

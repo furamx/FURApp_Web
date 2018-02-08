@@ -18,8 +18,13 @@
 
 .ControlLabel{
     text-align: left;
+    margin-bottom: 5px;
 }
 .PanelHeader {
     text-align: left;
     
+}
+
+.SaveButton{
+    margin-top: 20px;
 }

@@ -14,18 +14,9 @@ export default class Map extends Component {
         super(props);
         this.state = {
             panelTitle: "Mapa",
-            dropdownTitle: "Eventos",
             open: false
         }
     }
-
-    componentWillMount() {
-
-    }
-    componentDidMount() {
-
-    }
-
     render() {
         return (
             <div>
